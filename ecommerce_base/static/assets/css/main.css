@@ -1,0 +1,25 @@
+#website_snippets{
+    margin-top: 50px;
+}
+
+/* signup form */
+#auth_form_signin,#auth_form_signup{
+    background: #ffffff;
+    margin-top: 24px;
+    border: 1px solid #df89087a;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+/* order-summary page */
+.cart_qty{
+    border: 1px solid;
+    width: 120px;
+}
+
+.cart_qty input{
+    width: 60px !important;
+    text-align: center;
+    border-radius: 0;
+}

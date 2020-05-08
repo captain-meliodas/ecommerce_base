@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container wow fadeIn">
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <caption style="caption-side: top;"><h2>Order Summary</h2></caption>
+              <thead>
+                <tr>
+                  <th scope="col" colspan="2">Product</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Total Price</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for order in order.product_items.all%}
+                    <tr>
+                      <th scope="row" colspan="2"><a href="{{order.product.get_product_url}}">{{order.product.name}}</a></th>
+                      <td>
+                        <div class="cart_qty d-flex align-items-center flex-nowrap">
+                          <a href="{% url 'product:RemoveQtyProduct' order.product.slug %}">
+                            <i class="fa fa-minus mr-2 ml-2"></i>
+                          </a>
+                          <input type="number" name="quantity" min="1" readonly="True" value="{{order.quantity}}" aria-label="Search" class="form-control" style="width: 100px">
+                          <a href="{% url 'product:AddQtyProduct' order.product.slug %}">
+                            <i class="fa fa-plus mr-2 ml-2"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        ${% if order.product.discount %}
+                          {{order.product.discount}}
+                        {% else %}
+                          {{order.product.price}}
+                        {% endif %}
+                      </td>
+                      <td>$ {{ order.total_product_price }}</td>
+                      <td>
+                        <a href="{{order.product.get_remove_cart_product_url}}" class="text-danger">
+                            <i class="fa fa-trash ml-1"></i>
+                        </a>
+                      </td>
+                    </tr>
+                 {% endfor %}
+                 <tr>
+                   <td colspan="4"><strong>Order Total</strong></td>
+                   <td><strong>{{order.total_order_price}}</strong></td>
+                   <td></td>
+                 </tr>
+                </tbody>
+            </table>
+            <div class="summary_btn">
+              <a href="{% url 'product:ShopPage' %}" class="btn btn-primary float-left btn-md my-0">Continue Shopping
+              </a>
+              {% if order.product_items %}
+              <a href="{% url 'product:CheckoutPage' %}" class="btn btn-default float-right btn-md my-0">Proceed Checkout
+              </a>
+              {% endif %}
+            </div>
+          </div>
+    </div>
+  </main>
+  <!--Main layout-->
+{% endblock %}

@@ -1,0 +1,61 @@
+{% load cart_product_count %}
+<!--Grid column-->
+<div class="col-md-4 mb-4">
+
+    <!-- Heading -->
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-muted">Your cart</span>
+      <span class="badge badge-secondary badge-pill">{{request.user|cart_product_count}}</span>
+    </h4>
+
+    <!-- Cart -->
+    <ul class="list-group mb-3 z-depth-1">
+      {% for order in order.product_items.all%}
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">{{order.product.name}}</h6>
+            <small class="text-muted">Quantity</small> <small class="text-muted">{{order.quantity}}</small>
+          </div>
+          <span class="text-muted">
+            ${% if order.product.discount %}
+              {{order.product.discount}}
+            {% else %}
+              {{order.product.price}}
+            {% endif %}
+          </span>
+        </li>
+      {% endfor %}
+      {% if order.coupon_applied %}
+      <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success">
+          <h6 class="my-0">{{order.coupon_applied.code}}</h6>
+          <small><a href="{% url 'product:RemoveCoupon' %}" class="text-danger">
+            <i class="fa fa-trash ml-1"></i>
+        </a></small>
+        </div>
+        <span class="text-success">-${{order.get_discounted_price}}</span>
+      </li>
+      {% endif %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>Total (USD)</span>
+        <strong>${{order.total_order_price}}</strong>
+      </li>
+    </ul>
+    <!-- Cart -->
+
+    <!-- Promo code -->
+    {% if couponform %}
+        <form class="card p-2" action="{% url 'product:Coupon' %}" method="POST">
+            {% csrf_token %}
+        <div class="input-group">
+            {{couponform.code}}
+            <div class="input-group-append">
+            <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">Redeem</button>
+            </div>
+        </div>
+        </form>
+    {% endif %}
+    <!-- Promo code -->
+
+  </div>
+  <!--Grid column-->
